@@ -1,7 +1,7 @@
 // AuthContext.tsx
 import { createContext, useState, ReactNode, useEffect } from 'react';
 import { api } from '../service/api';
-import { User, saveAuthData, clearAuthData, getAuthData } from './AuthHelpers'; // Importa as funções auxiliares
+import { User, saveAuthData, clearAuthData, getAuthData } from './AuthHelpers';
 
 interface AuthContextType {
   user: User | null;

@@ -1,3 +1,4 @@
+// src/routes/adminRoutes.ts
 import { FastifyPluginAsync } from 'fastify';
 import prisma from '../prisma';
 import jwt from 'jsonwebtoken';
@@ -40,6 +41,34 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
     } catch (err) {
       request.log.error(err);
       return reply.status(500).send({ message: "Erro ao tentar fazer login." });
+    }
+  });
+
+  fastify.post("/cadastrar-aulas", async (request, reply) => {
+    const { titulo, descricao, link, data } = request.body as {
+      titulo: string;
+      descricao: string;
+      link: string;
+      data: string;
+    };
+
+    try {
+      const newAula = await prisma.aula.create({
+        data: {
+          titulo,
+          descricao,
+          link,
+          data: new Date(data),
+        },
+      });
+
+      return reply.status(201).send({
+        message: "Aula cadastrada com sucesso!",
+        aula: newAula,
+      });
+    } catch (err) {
+      request.log.error(err);
+      return reply.status(500).send({ message: "Erro ao tentar cadastrar a aula." });
     }
   });
 };

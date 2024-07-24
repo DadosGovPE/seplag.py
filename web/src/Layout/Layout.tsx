@@ -15,7 +15,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     ...(signed
       ? [
         { name: 'Agendamento', link: '/admin-agendamento', admin: true },
-        { name: 'Admin', link: '/admin-aulas', admin: true}
+        { name: 'Cadastro de Aulas', link: '/admin-aulas', admin: true}
         ]
       : [{ name: 'Admin', link: '/admin' }]),
   ];

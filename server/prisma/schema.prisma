@@ -1,3 +1,5 @@
+// schema.prisma
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -10,7 +12,7 @@ generator client {
 model User {
   id    Int    @id @default(autoincrement())
   email String @unique
-  nome  String
+  nome  String 
 }
 
 model Admin {
@@ -19,8 +21,10 @@ model Admin {
   password String
 }
 
-model mail_schedule {
-  id      Int    @id @default(autoincrement())
-  content String
-  img     String
+model Aula {
+  id          Int      @id @default(autoincrement())
+  title      String
+  describe   String
+  link       String
+  date       DateTime
 }

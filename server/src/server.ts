@@ -1,14 +1,14 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { corsConfig } from "./config/cors";
-import newsletterRoutes from "./routes/newsletter";
+import userRoutes from "./routes/user";
 import adminRoutes from "./routes/admin";
 
 const fastify = Fastify();
 
 fastify.register(cors, corsConfig);
 
-fastify.register(newsletterRoutes);
+fastify.register(userRoutes);
 fastify.register(adminRoutes);
 
 const start = async () => {
