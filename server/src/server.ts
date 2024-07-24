@@ -1,8 +1,9 @@
 import Fastify from "fastify";
 import { PrismaClient } from "@prisma/client";
 import cors from "@fastify/cors";
+import jwt from 'jsonwebtoken';
 
-const fastify = Fastify({ logger: true });
+const fastify = Fastify();
 const prisma = new PrismaClient();
 
 fastify.register(cors, {
@@ -47,7 +48,22 @@ fastify.post("/admin-login", async (request, reply) => {
       return reply.status(401).send({ message: "Credenciais inválidas." });
     }
 
-    return reply.status(200).send({ message: "Login bem-sucedido!" });
+    const token = jwt.sign(
+      { id: admin.id, email: admin.email },
+      'afsdagdhfdagdsfds',
+      { expiresIn: '1h' }
+    );
+    console.log(token);
+    
+
+    return reply.status(200).send({
+      message: "Login bem-sucedido!",
+      token,
+      user: {
+        id: admin.id,
+        email: admin.email,
+      },
+    });
   } catch (err) {
     request.log.error(err);
     return reply.status(500).send({ message: "Erro ao tentar fazer login." });
