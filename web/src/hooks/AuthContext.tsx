@@ -1,27 +1,26 @@
 // AuthContext.tsx
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useState, ReactNode, useEffect } from 'react';
 import { api } from '../service/api';
+import { User, saveAuthData, clearAuthData, getAuthData } from './AuthHelpers'; // Importa as funções auxiliares
 
 interface AuthContextType {
-  user: any; // Ajuste conforme necessário
+  user: User | null;
   signed: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => void;
   token: string | null;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("@Auth:user");
-    const savedToken = localStorage.getItem("@Auth:token");
-
+    const { user: savedUser, token: savedToken } = getAuthData();
     if (savedUser && savedToken) {
-      setUser(JSON.parse(savedUser));
+      setUser(savedUser);
       setToken(savedToken);
       api.defaults.headers.common["Authorization"] = `Bearer ${savedToken}`;
     }
@@ -36,19 +35,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(response.data.user);
         setToken(response.data.token);
         api.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-        localStorage.setItem("@Auth:token", response.data.token);
-        localStorage.setItem("@Auth:user", JSON.stringify(response.data.user));
+        saveAuthData(response.data.user, response.data.token);
       }
     } catch (error) {
       console.error("Login failed:", error);
+      alert("Failed to sign in. Please try again.");
     }
   };
 
   const signOut = () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem("@Auth:token");
-    localStorage.removeItem("@Auth:user");
+    clearAuthData();
     delete api.defaults.headers.common["Authorization"];
   };
 
@@ -57,12 +55,4 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };

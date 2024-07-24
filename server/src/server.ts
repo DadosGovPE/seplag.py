@@ -1,74 +1,15 @@
 import Fastify from "fastify";
-import { PrismaClient } from "@prisma/client";
 import cors from "@fastify/cors";
-import jwt from 'jsonwebtoken';
+import { corsConfig } from "./config/cors";
+import newsletterRoutes from "./routes/newsletter";
+import adminRoutes from "./routes/admin";
 
 const fastify = Fastify();
-const prisma = new PrismaClient();
 
-fastify.register(cors, {
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-});
+fastify.register(cors, corsConfig);
 
-fastify.post("/newsletter_subscribe", async (request, reply) => {
-  try {
-    const { email, nome } = request.body as { email: string; nome: string };
-
-    await prisma.user.create({
-      data: {
-        email,
-        nome,
-      },
-    });
-
-    return reply.send({ message: "Subscription successful!" });
-  } catch (err) {
-    request.log.error(err);
-    return reply.status(500).send({ message: "Failed to add subscription" });
-  }
-});
-
-fastify.post("/admin-login", async (request, reply) => {
-  const { email, password } = request.body as {
-    email: string;
-    password: string;
-  };
-
-  try {
-    const admin = await prisma.admin.findUnique({
-      where: { email },
-    });
-
-    if (!admin) {
-      return reply.status(401).send({ message: "Credenciais inválidas." });
-    }
-
-    if (admin.password !== password) {
-      return reply.status(401).send({ message: "Credenciais inválidas." });
-    }
-
-    const token = jwt.sign(
-      { id: admin.id, email: admin.email },
-      'afsdagdhfdagdsfds',
-      { expiresIn: '1h' }
-    );
-    console.log(token);
-    
-
-    return reply.status(200).send({
-      message: "Login bem-sucedido!",
-      token,
-      user: {
-        id: admin.id,
-        email: admin.email,
-      },
-    });
-  } catch (err) {
-    request.log.error(err);
-    return reply.status(500).send({ message: "Erro ao tentar fazer login." });
-  }
-});
+fastify.register(newsletterRoutes);
+fastify.register(adminRoutes);
 
 const start = async () => {
   try {
