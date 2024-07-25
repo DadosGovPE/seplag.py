@@ -21,8 +21,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   ];
 
   return (
-    <div className="relative flex h-screen bg-gray-100 overflow-hidden">
-      <header className="w-full bg-white shadow-md fixed top-0 left-0 z-20 lg:hidden">
+    <div className="relative flex h-screen bg-gray-100">
+      <header className="w-full bg-white shadow-md fixed top-0 left-0 lg:hidden">
         <div className="flex items-center justify-between p-4">
           <img src="logo.png" className="h-8" alt="Logo" />
           <button
@@ -39,7 +39,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed top-0 left-0 w-full bg-white shadow-md h-full overflow-y-auto z-30"
+            className="fixed top-0 left-0 w-full bg-white shadow-md h-full overflow-y-auto "
           >
             <div className="p-4">
               <ul className="space-y-4">
@@ -75,7 +75,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </header>
 
       {/* Menu Lateral para Telas Grandes */}
-      <aside className="w-64 bg-white shadow-md relative z-10 hidden lg:flex lg:flex-col lg:justify-between">
+      <aside className="w-64 bg-white shadow-md relative hidden lg:flex lg:flex-col lg:justify-between h-full">
         <div>
           <img src="logo.png" className="p-4" alt="Logo" />
           <div className="p-4">
@@ -113,7 +113,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         )}
       </aside>
 
-      <main className="flex-1 p-6 relative z-10">{children}</main>
+      <main className="flex-1 p-6 overflow-y-auto">{children}</main>
     </div>
   );
 };

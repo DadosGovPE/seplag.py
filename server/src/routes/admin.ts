@@ -44,21 +44,21 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
     }
   });
 
-  fastify.post("/cadastrar-aulas", async (request, reply) => {
-    const { titulo, descricao, link, data } = request.body as {
-      titulo: string;
-      descricao: string;
+  fastify.post("/aulas", async (request, reply) => {
+    const { title, description, link, date } = request.body as {
+      title: string;
+      description: string;
       link: string;
-      data: string;
+      date: string;
     };
 
     try {
       const newAula = await prisma.aula.create({
         data: {
-          titulo,
-          descricao,
+          title,
+          description,
           link,
-          data: new Date(data),
+          date: new Date(date),
         },
       });
 

@@ -21,7 +21,7 @@ const userRoutes: FastifyPluginAsync = async (fastify) => {
     }
   });
 
-  fastify.get("/buscar-aulas", async (request, reply) => {
+  fastify.get("/aulas", async (request, reply) => {
     try {
       const aulas = await prisma.aula.findMany();
       return reply.send(aulas);
