@@ -18,7 +18,6 @@ const AulaList: React.FC<AulaListProps> = ({
   totalPages,
   handlePageChange,
 }) => {
-  const itemsPerPage = 3;
 
   const sortedCards = [...currentCards].sort((a, b) => {
     const dateA = new Date(a.date).getTime();
@@ -26,18 +25,13 @@ const AulaList: React.FC<AulaListProps> = ({
     return dateB - dateA; 
   });
 
-  console.log('====================================');
-  console.log('SortedCards',sortedCards);
-  console.log('====================================');
-
  
-  const cardsToShow = sortedCards
 
   return (
     <>
       <h2 className="text-lg font-semibold mt-8 mb-4">Aulas Cadastradas</h2>
       <ul className="space-y-4">
-        {cardsToShow.map(card => (
+        {sortedCards.map(card => (
           <li
             key={card.id}
             className="flex flex-col md:flex-row justify-between items-center p-4 border border-gray-300 rounded-lg bg-white shadow-md"

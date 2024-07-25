@@ -22,6 +22,7 @@ const AulaFormModal: React.FC<AulaFormModalProps> = ({
   success,
   editingCard,
 }) => {
+    console.log()
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 transition-opacity">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 transform transition-transform duration-300 ease-in-out scale-95">

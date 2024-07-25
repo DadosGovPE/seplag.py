@@ -50,7 +50,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                         location.pathname === link
                           ? 'bg-blue-700 text-white border-blue-500'
                           : 'hover:bg-blue-700 hover:text-white'
-                      } ${admin ? 'bg-yellow-200' : ''}`}
+                      } ${admin ? 'bg-yellow-400' : ''}`}
                       to={link}
                       onClick={() => setMenuOpen(false)}
                     >
@@ -90,8 +90,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                     } 
                     
                     ${admin ? ` rounded transition-colors duration-300 ${ location.pathname === link
-                        ? 'bg-yellow-200 text-blue-600'
-                        : 'bg-white text-blue-600  hover:text-blue-600 hover:bg-yellow-200  '} ` : ''} `} 
+                        ? 'bg-yellow-400 text-blue-600'
+                        : 'bg-white text-blue-600  hover:text-blue-600 hover:bg-yellow-400  '} ` : ''} `} 
                     to={link}
                   >
                     {name}

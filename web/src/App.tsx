@@ -21,7 +21,6 @@ const App = () => {
           </Routes>
         </Layout>
       </AuthProvider>
-
     </Router>
   );
 };
