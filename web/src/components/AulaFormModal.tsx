@@ -22,7 +22,6 @@ const AulaFormModal: React.FC<AulaFormModalProps> = ({
   success,
   editingCard,
 }) => {
-    console.log()
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 transition-opacity">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 transform transition-transform duration-300 ease-in-out scale-95">
@@ -32,7 +31,7 @@ const AulaFormModal: React.FC<AulaFormModalProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-4">
             <div>
-              <label htmlFor="titulo" className="block text-sm font-medium text-gray-700">Título</label>
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700">Título</label>
               <input
                 type="text"
                 id="title"
@@ -73,7 +72,7 @@ const AulaFormModal: React.FC<AulaFormModalProps> = ({
                 type="date"
                 id="date"
                 name="date"
-                value={formValues.date}
+                value={formValues.date.slice(0, 10)} // Formato YYYY-MM-DD
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 required

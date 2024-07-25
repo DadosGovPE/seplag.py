@@ -1,4 +1,3 @@
-// src/routes/userRoutes.ts
 import { FastifyPluginAsync } from "fastify";
 import prisma from "../prisma";
 

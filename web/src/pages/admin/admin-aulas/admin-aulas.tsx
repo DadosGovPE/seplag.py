@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 import { api } from '../../../service/api';
 import SearchBar from '../../../components/Searchbar';
 import AulaFormModal from '../../../components/AulaFormModal';
@@ -97,10 +97,14 @@ const AdminAulas: React.FC = () => {
     }
   };
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
-    setFormValues(prevValues => ({ ...prevValues, [name]: value }));
+    setFormValues(prevValues => ({
+      ...prevValues,
+      [name]: value
+    }));
   };
+  
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
