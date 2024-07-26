@@ -73,7 +73,7 @@ const AdminAulas: React.FC = () => {
     );
     setFilteredCards(results);
     setTotalPages(Math.ceil(results.length / itemsPerPage));
-    setCurrentPage(1); // Reseta a página atual após a alteração do termo de busca
+    setCurrentPage(1); 
   }, [searchTerm, cards]);
 
   const handleEdit = (card: Card) => {
@@ -90,7 +90,7 @@ const AdminAulas: React.FC = () => {
   const handleDelete = async (id: number) => {
     try {
       await api.delete(`/aulas/${id}`);
-      fetchData(); // Atualiza os dados após a exclusão
+      fetchData();
       setSuccess('Aula deletada com sucesso!');
     } catch (error) {
       console.error('Erro ao deletar aula:', error);
@@ -115,11 +115,11 @@ const AdminAulas: React.FC = () => {
     try {
       if (editingCard) {
         await api.put(`/aulas/${editingCard.id}`, formValues);
-        fetchData(); // Atualiza os dados após a edição
+        fetchData();
         setSuccess('Aula atualizada com sucesso!');
       } else {
         await api.post('/aulas', formValues);
-        fetchData(); // Atualiza os dados após a criação
+        fetchData();
         setSuccess('Aula criada com sucesso!');
       }
 
@@ -151,7 +151,7 @@ const AdminAulas: React.FC = () => {
   );
 
   return (
-    <div className='bg-white p-5 shadow-md'>
+    <div className='bg-white p-5 shadow-md min-h-screen'>
       <h1 className="text-2xl font-bold mb-4">Gerenciamento de Aulas</h1>
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <button

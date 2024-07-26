@@ -114,6 +114,20 @@ const AdminAgendamento = () => {
   const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedDate(e.target.value);
   };
+  
+  const handleDeleteAppointment = async (id: string) => {
+    try {
+      await api.delete(`/agendamentos/${id}`);
+      setAppointments(appointments.filter(appointment => appointment.id !== id));
+      if (id === scheduleSelected) {
+        setScheduleSelected(undefined);
+      }
+      setFeedbackMessage('Agendamento deletado com sucesso.');
+    } catch (error) {
+      console.error('Erro ao deletar agendamento:', error);
+      setFeedbackMessage('Erro ao deletar agendamento.');
+    }
+  };
 
   const viewScheduledAppointments = async () => {
     try {
@@ -295,6 +309,12 @@ const AdminAgendamento = () => {
                   onClick={() => handleEditAppointment(appointment)}
                 >
                   Editar
+                </button>
+                <button
+                  className="bg-red-500 text-white p-2 rounded-md"
+                  onClick={() => handleDeleteAppointment(appointment.id)}
+                >
+                  Deletar
                 </button>
                 <button
                   className="bg-green-500 text-white p-2 rounded-md"
