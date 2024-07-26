@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
+import { useState, useRef, ChangeEvent } from 'react';
+import { api } from '../../../service/api';
+
+interface Appointment {
+  id: string;
+  content: string;
+  date: string;
+  meetingTitle: string;
+  scheduleText: string;
+}
+
+interface FormData {
+  content: string;
+  date: string;
+}
 
 const AdminAgendamento = () => {
-  const [title, setTitle] = useState('');
-  const [textContent, setTextContent] = useState('');
-
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
-  };
-
-  const handleTextChange = (event) => {
-    setTextContent(event.target.value);
-  };
-
-
-
-  // Template padrão para HTML
   const defaultHtmlTemplate = `
     <!DOCTYPE html>
     <html lang="pt-BR">
     <head>
         <meta charset="UTF-8">
-        <title>${title}</title>
+        <title>Visualização</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -66,14 +66,13 @@ const AdminAgendamento = () => {
     <body>
     <div class="body__">
         <div class="banner">
-            <img src=":header_img" alt="Banner Image" width="600" height="300">
+            <img src="logo.png" alt="Banner Image" width="600" height="300">
         </div>
-
         <div class="container">
-            <p>Toda terça, 8h30 da manhã</p>
-            <h1>🐍 Encontro 6 - (${title})</h1>
+            <p>{{scheduleText}}</p>
+            <h1>🐍 Encontro - {{meetingTitle}}</h1>
             <div class="msg">
-            ${textContent}
+                {{content}}
             </div>
             <div class="footer">
                 © 2024 - IG/Seplag.py
@@ -84,42 +83,304 @@ const AdminAgendamento = () => {
     </html>
   `;
 
+  const [scheduleSelected, setScheduleSelected] = useState<string>();
+  const [htmlContent, setHtmlContent] = useState<string>('<p>Edite este conteúdo</p>');
+  const [scheduleText, setScheduleText] = useState<string>('Toda terça, 8h30 da manhã');
+  const [meetingTitle, setMeetingTitle] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [activeSection, setActiveSection] = useState<'schedule' | 'appointments'>('schedule');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+console.log('====================================');
+console.log(editingAppointment);
+console.log('====================================');
+  const insertImageToContent = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      const start = textarea.selectionStart ?? 0;
+      const end = textarea.selectionEnd ?? 0;
+      const text = textarea.value;
+      const before = text.substring(0, start);
+      const after = text.substring(end, text.length);
+      const newText = `${before}<img src="${imageUrl}" alt="Imagem carregada" width="600" height="300" />${after}`;
+
+      setHtmlContent(newText);
+      setImageUrl('');
+    }
+  };
+
+  const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSelectedDate(e.target.value);
+  };
+
+  const viewScheduledAppointments = async () => {
+    try {
+      const response = await api.get<Appointment[]>('/agendamentos');      
+      setAppointments(response.data);
+    } catch (error) {
+      console.error('Erro ao buscar agendamentos:', error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedDate) {
+      setFeedbackMessage('Por favor, selecione uma data.');
+      return;
+    }
+
+    try {
+      const combinedHtml = defaultHtmlTemplate
+        .replace('{{content}}', htmlContent)
+        .replace('{{scheduleText}}', scheduleText)
+        .replace('{{meetingTitle}}', meetingTitle);
+
+      const response = await api.post('/agendamentos', {
+        content: combinedHtml,
+        date: selectedDate
+      } as FormData);
+
+      console.log('Agendamento enviado com sucesso:', response.data);
+      setMeetingTitle('');
+      setScheduleText('Toda terça, 8h30 da manhã');
+      setHtmlContent('<p>Edite este conteúdo</p>');
+      setSelectedDate('');
+      setFeedbackMessage(null); 
+    } catch (error) {
+      console.error('Erro ao enviar agendamento:', error);
+    }
+  };
+
+  const handleEditAppointment = (appointment: Appointment) => {
+    setEditingAppointment(appointment);
+    setIsModalOpen(true);
+  };
+
+  const handleSaveAppointment = async () => {
+    if (editingAppointment) {
+      try {
+        const response = await api.put(`/agendamentos/${editingAppointment.id}`, {
+          content: editingAppointment.content,
+          date: editingAppointment.date,
+          meetingTitle: editingAppointment.meetingTitle,
+          scheduleText: editingAppointment.scheduleText
+        });
+
+        console.log('Agendamento atualizado com sucesso:', response.data);
+        setIsModalOpen(false);
+        viewScheduledAppointments();
+      } catch (error) {
+        console.error('Erro ao atualizar agendamento:', error);
+      }
+    }
+  };
+
+  const combinedHtml = defaultHtmlTemplate
+    .replace('{{content}}', htmlContent)
+    .replace('{{scheduleText}}', scheduleText)
+    .replace('{{meetingTitle}}', meetingTitle);
+
   return (
-    <div className="flex flex-wrap space-x-4 p-4">
-      <div className="w-full mb-4">
-        <h2 className="text-xl font-semibold mb-2">Título</h2>
-        <input
-          type="text"
-          value={title}
-          onChange={handleTitleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          placeholder="Digite o título"
-        />
+    <div className="flex flex-col h-full">
+      <div className="bg-gray-800 text-white flex justify-around rounded p-4">
+        <button
+          className={`p-2 rounded ${activeSection === 'schedule' ? 'bg-blue-500' : ''}`}
+          onClick={() => setActiveSection('schedule')}
+        >
+          Agendar
+        </button>
+        <button
+          className={`p-2 rounded ${activeSection === 'appointments' ? 'bg-blue-500' : ''}`}
+          onClick={() => {
+            setActiveSection('appointments');
+            viewScheduledAppointments();
+          }}
+        >
+          Agendamentos
+        </button>
       </div>
 
-      <div className="w-full md:w-1/3 px-2 mb-4">
-        <h2 className="text-xl font-semibold mb-2">Texto Normal</h2>
-        <textarea
-          value={textContent}
-          onChange={handleTextChange}
-          rows={10}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+      <div className="flex flex-wrap p-4 justify-between flex-1">
+        {activeSection === 'schedule' && (
+          <div className="w-full md:w-1/2 px-2 mb-4">
+            <label htmlFor="date_agendamento" className="block text-sm font-medium text-gray-700 mb-2">
+              Data de Envio
+            </label>            
+            <input
+              id='date_agendamento'
+              type="date"
+              className="w-full border border-gray-300 rounded-md p-2 mb-4"
+              value={selectedDate}
+              onChange={handleDateChange}
+            />
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+              Título
+            </label> 
+            <input
+              id='title'
+              type="text"
+              className="w-full border border-gray-300 rounded-md p-2 mb-4"
+              placeholder="Título do encontro"
+              value={meetingTitle}
+              onChange={(e) => setMeetingTitle(e.target.value)}
+            />
+            <label htmlFor="detailsDay" className="block text-sm font-medium text-gray-700 mb-2">
+              Detalhes do dia ( Pode HTML )  
+            </label> 
+            <input
+              id='detailsDay'
+              type="text"
+              className="w-full border border-gray-300 rounded-md p-2 mb-4"
+              placeholder="Texto do agendamento"
+              value={scheduleText}
+              onChange={(e) => setScheduleText(e.target.value)}
+            />
+            <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+              Conteudo ( Pode HTML )  
+            </label> 
+            <textarea
+              id='content'
+              ref={textareaRef}
+              className="w-full h-48 border border-gray-300 rounded-md p-2 mb-4"
+              value={htmlContent}
+              onChange={(e) => setHtmlContent(e.target.value)}
+            />
+            <label htmlFor="imageOrGif" className="block text-sm font-medium text-gray-700 mb-2">
+              Inserir Link de imagem ou GIF
+            </label> 
+            <input
+              id='imageOrGif'
+              type="text"
+              className="w-full border border-gray-300 rounded-md p-2 mb-4"
+              placeholder="URL da Imagem"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+            />
+            <button
+              className="w-full bg-blue-500 text-white p-2 rounded-md"
+              onClick={insertImageToContent}
+              disabled={!imageUrl}
+            >
+              Inserir Imagem
+            </button>
+            <button
+              className="w-full bg-green-500 text-white p-2 rounded-md mt-4"
+              onClick={handleSubmit}
+            >
+              Agendar
+            </button>
+            {feedbackMessage && (
+              <div className="mt-4 text-red-500">
+                {feedbackMessage}
+              </div>
+            )}
+          </div>
+        )}
+
+{activeSection === 'appointments' && (
+  <div className="flex flex-wrap justify-between flex-1">
+    <div className="w-full md:w-1/2 px-2 mb-4">
+      <ul className="border-gray-300 rounded-md border p-4">
+        {appointments.length > 0 ? (
+          appointments.map((appointment) => (
+            <li key={appointment.id} className="border-b py-2 flex justify-between items-center">
+              <div>
+                <p><strong>Data:</strong> {new Date(appointment.date).toLocaleDateString()}</p>
+              </div>
+              <div className="space-x-2">
+                <button
+                  className="bg-blue-500 text-white p-2 rounded-md"
+                  onClick={() => handleEditAppointment(appointment)}
+                >
+                  Editar
+                </button>
+                <button
+                  className="bg-green-500 text-white p-2 rounded-md"
+                  onClick={() => setScheduleSelected(appointment.id)}
+                >
+                  Visualizar
+                </button>
+              </div>
+            </li>
+          ))
+        ) : (
+          <li>Não há agendamentos.</li>
+        )}
+      </ul>
+    </div>
+    <div className="w-full md:w-1/2 px-2 mb-4">
+      {scheduleSelected ? (
+        <iframe
+          title="Visualização do Agendamento"
+          srcDoc={appointments.find((appt) => appt.id === scheduleSelected)?.content || ''}
+          className="w-full h-full border-0"
         />
+      ) : (
+        <p>Selecione um agendamento para visualizar.</p>
+      )}
+    </div>
+  </div>
+)}
+
+        {activeSection === 'schedule' && (
+          <div className="w-full md:w-1/2 px-2 mb-4 h-full">
+            <div className="border border-gray-300 rounded-md p-2 h-full overflow-auto">
+              <iframe
+                title="Visualização"
+                srcDoc={combinedHtml}
+                className="w-full h-full border-0"
+              />
+            </div>
+          </div>
+        )}
       </div>
 
-
-
-      <div className="w-full md:w-3/3 px-2 mb-4">
-        <h2 className="text-xl font-semibold mb-2">Visualização</h2>
-        <div className="border border-gray-300 rounded-md p-2 h-full overflow-auto">
-          <iframe
-            title="Visualização"
-            srcDoc={defaultHtmlTemplate.replace('${title || "Título Padrão"}', title).replace('${textContent || ...}', textContent)}
-            className="w-full h-full border-0"
-          />
-          <pre className="whitespace-pre-wrap mt-4">{textContent}</pre>
+      {isModalOpen && editingAppointment && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded-md shadow-lg w-full max-w-5xl flex overflow-hidden">
+            <div className="w-1/2 p-4">
+              <h2 className="text-lg font-semibold mb-4">Editar Agendamento</h2>
+              <textarea
+                className="w-full h-48 border border-gray-300 rounded-md p-2 mb-4"
+                value={editingAppointment.content || ''}
+                onChange={(e) => setEditingAppointment({ ...editingAppointment, content: e.target.value })}
+              />
+              <input
+                type="date"
+                className="w-full border border-gray-300 rounded-md p-2 mb-4"
+                value={editingAppointment.date || ''}
+                onChange={(e) => setEditingAppointment({ ...editingAppointment, date: e.target.value })}
+              />
+              <button
+                className="bg-blue-500 text-white p-2 rounded-md mr-2"
+                onClick={handleSaveAppointment}
+              >
+                Salvar
+              </button>
+              <button
+                className="bg-gray-500 text-white p-2 rounded-md"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Fechar
+              </button>
+            </div>
+            <div className="w-1/2 p-4">
+              <h2 className="text-lg font-semibold mb-4">Pré-visualização</h2>
+              <div className="w-full h-full rounded-md overflow-hidden">
+                <iframe
+                  title="Visualização"
+                  srcDoc={editingAppointment.content}
+                  className="w-full h-full border-0"
+                />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+   
     </div>
   );
 };
