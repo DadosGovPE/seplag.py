@@ -95,9 +95,7 @@ const AdminAgendamento = () => {
   const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-console.log('====================================');
-console.log(editingAppointment);
-console.log('====================================');
+
   const insertImageToContent = () => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -169,9 +167,10 @@ console.log('====================================');
           scheduleText: editingAppointment.scheduleText
         });
 
-        console.log('Agendamento atualizado com sucesso:', response.data);
-        setIsModalOpen(false);
-        viewScheduledAppointments();
+        if(response.status == 200){
+          setIsModalOpen(false);
+          viewScheduledAppointments();
+        }
       } catch (error) {
         console.error('Erro ao atualizar agendamento:', error);
       }
@@ -184,7 +183,7 @@ console.log('====================================');
     .replace('{{meetingTitle}}', meetingTitle);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className='bg-white min-h-screen'>
       <div className="bg-gray-800 text-white flex justify-around rounded p-4">
         <button
           className={`p-2 rounded ${activeSection === 'schedule' ? 'bg-blue-500' : ''}`}
@@ -205,7 +204,7 @@ console.log('====================================');
 
       <div className="flex flex-wrap p-4 justify-between flex-1">
         {activeSection === 'schedule' && (
-          <div className="w-full md:w-1/2 px-2 mb-4">
+          <div className="w-1/2 p-5 my-4 border border-gray-300 rounded-md">            
             <label htmlFor="date_agendamento" className="block text-sm font-medium text-gray-700 mb-2">
               Data de Envio
             </label>            
@@ -281,9 +280,9 @@ console.log('====================================');
         )}
 
 {activeSection === 'appointments' && (
-  <div className="flex flex-wrap justify-between flex-1">
-    <div className="w-full md:w-1/2 px-2 mb-4">
-      <ul className="border-gray-300 rounded-md border p-4">
+  <div className="flex-1 flex">
+    <div className="w-1/2 px-2">
+      <ul className="border-gray-300 rounded-md border p-5 h-full">
         {appointments.length > 0 ? (
           appointments.map((appointment) => (
             <li key={appointment.id} className="border-b py-2 flex justify-between items-center">
@@ -311,23 +310,26 @@ console.log('====================================');
         )}
       </ul>
     </div>
-    <div className="w-full md:w-1/2 px-2 mb-4">
+    <div className="w-1/2 p-5 border border-gray-300 rounded-md">
       {scheduleSelected ? (
         <iframe
           title="Visualização do Agendamento"
           srcDoc={appointments.find((appt) => appt.id === scheduleSelected)?.content || ''}
-          className="w-full h-full border-0"
+          className="w-full h-screen border-0"
         />
       ) : (
+        <div>
+
         <p>Selecione um agendamento para visualizar.</p>
+        </div>
       )}
     </div>
   </div>
 )}
 
         {activeSection === 'schedule' && (
-          <div className="w-full md:w-1/2 px-2 mb-4 h-full">
-            <div className="border border-gray-300 rounded-md p-2 h-full overflow-auto">
+          <div className="w-1/2 p-5 mb-4">
+            <div className="border border-gray-300 rounded-md h-full">
               <iframe
                 title="Visualização"
                 srcDoc={combinedHtml}
@@ -339,49 +341,51 @@ console.log('====================================');
       </div>
 
       {isModalOpen && editingAppointment && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-4 rounded-md shadow-lg w-full max-w-5xl flex overflow-hidden">
-            <div className="w-1/2 p-4">
-              <h2 className="text-lg font-semibold mb-4">Editar Agendamento</h2>
-              <textarea
-                className="w-full h-48 border border-gray-300 rounded-md p-2 mb-4"
-                value={editingAppointment.content || ''}
-                onChange={(e) => setEditingAppointment({ ...editingAppointment, content: e.target.value })}
-              />
-              <input
-                type="date"
-                className="w-full border border-gray-300 rounded-md p-2 mb-4"
-                value={editingAppointment.date || ''}
-                onChange={(e) => setEditingAppointment({ ...editingAppointment, date: e.target.value })}
-              />
-              <button
-                className="bg-blue-500 text-white p-2 rounded-md mr-2"
-                onClick={handleSaveAppointment}
-              >
-                Salvar
-              </button>
-              <button
-                className="bg-gray-500 text-white p-2 rounded-md"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Fechar
-              </button>
-            </div>
-            <div className="w-1/2 p-4">
-              <h2 className="text-lg font-semibold mb-4">Pré-visualização</h2>
-              <div className="w-full h-full rounded-md overflow-hidden">
-                <iframe
-                  title="Visualização"
-                  srcDoc={editingAppointment.content}
-                  className="w-full h-full border-0"
-                />
-              </div>
-            </div>
-          </div>
+  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div className="bg-white p-4 rounded-md shadow-lg w-full max-w-5xl flex overflow-hidden">
+      <div className="w-1/2 p-5 my-10">
+        <h2 className="text-lg font-semibold mb-4">Editar Agendamento</h2>
+        <textarea
+          className="w-full h-48 border border-gray-300 rounded-md p-2 mb-4"
+          value={editingAppointment.content || ''}
+          onChange={(e) => setEditingAppointment({ ...editingAppointment, content: e.target.value })}
+        />
+        <input
+          type="date"
+          className="w-full border border-gray-300 rounded-md p-2 mb-4"
+          value={editingAppointment.date ? new Date(editingAppointment.date).toISOString().split('T')[0] : ''}
+          onChange={(e) => setEditingAppointment({ ...editingAppointment, date: e.target.value })}
+        />
+        <button
+          className="bg-blue-500 text-white p-2 rounded-md mr-2"
+          onClick={handleSaveAppointment}
+        >
+          Salvar
+        </button>
+        <button
+          className="bg-gray-500 text-white p-2 rounded-md"
+          onClick={() => setIsModalOpen(false)}
+        >
+          Fechar
+        </button>
+      </div>
+      <div className="w-1/2 p-5 my-10">
+        <h2 className="text-lg font-semibold mb-4">Pré-visualização</h2>
+        <div className="border border-gray-300 rounded-md h-full">
+          <iframe
+            title="Visualização"
+            srcDoc={editingAppointment.content}
+            className="w-full h-full border-0"
+          />
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+)}
+
    
     </div>
+
   );
 };
 
