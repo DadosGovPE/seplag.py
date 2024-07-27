@@ -31,7 +31,8 @@ model Aula {
 
 model Agendamento {
   id        Int      @id @default(autoincrement())
-  content  String
+  content   String
   date      DateTime
   createdAt DateTime @default(now())
+  send      Boolean  @default(false)
 }

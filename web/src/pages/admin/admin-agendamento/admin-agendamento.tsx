@@ -7,6 +7,7 @@ interface Appointment {
   date: string;
   meetingTitle: string;
   scheduleText: string;
+  send: boolean;
 }
 
 interface FormData {
@@ -131,12 +132,15 @@ const AdminAgendamento = () => {
 
   const viewScheduledAppointments = async () => {
     try {
-      const response = await api.get<Appointment[]>('/agendamentos');      
-      setAppointments(response.data);
+      const response = await api.get<Appointment[]>('/agendamentos');
+      const filteredAppointments = response.data.filter(appointment => appointment.send === false);
+      console.log(response)
+      setAppointments(filteredAppointments);
     } catch (error) {
       console.error('Erro ao buscar agendamentos:', error);
     }
   };
+  
 
   const handleSubmit = async () => {
     if (!selectedDate) {

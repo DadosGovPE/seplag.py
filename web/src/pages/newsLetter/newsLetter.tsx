@@ -19,10 +19,9 @@ export default function NewsLetter() {
     setMessage('');
 
     try {
-      // Ajuste a URL para corresponder ao seu endpoint Fastify
       await axios.post('http://localhost:3000/newsletter_subscribe', {
         email: formData.email,
-        nome: formData.name // Ajuste o nome do campo para corresponder ao esperado pelo backend
+        nome: formData.name 
       });
 
       setTimeout(() => {
@@ -31,7 +30,6 @@ export default function NewsLetter() {
         setFormData({ name: '', email: '' });
       }, 2000);
     } catch (error) {
-      // Trata erros
       setLoading(false);
       setMessage('Ocorreu um erro ao se inscrever. Tente novamente.');
     }
@@ -52,7 +50,7 @@ export default function NewsLetter() {
 
   if (submitted) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex flex-col items-center justify-center min-h-screen  ">
         <div className="max-w-md w-full p-6 bg-green-100 border border-green-300 rounded shadow-md">
           <h2 className="text-2xl font-bold mb-4 text-green-700">Obrigado por se inscrever!</h2>
           <p className="mb-4 text-green-600">Você foi adicionado à nossa lista de newsletter com sucesso.</p>
@@ -68,7 +66,7 @@ export default function NewsLetter() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen ">
+    <div className="flex items-center justify-center h-full overflow-hidden">
       <div className="max-w-md w-full p-6 bg-white shadow-md rounded">
         <h2 className="text-2xl font-bold mb-4">Inscreva-se na nossa Newsletter</h2>
         {message && <p className="mb-4 text-red-500">{message}</p>}

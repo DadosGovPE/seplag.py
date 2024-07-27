@@ -150,7 +150,6 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
     }
   });
 
-  // Rota para listar todos os agendamentos
   fastify.get("/agendamentos", async (request, reply) => {
     try {
       const agendamentos = await prisma.agendamento.findMany({
