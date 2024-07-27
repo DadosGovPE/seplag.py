@@ -74,7 +74,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         )}
       </header>
 
-      {/* Menu Lateral para Telas Grandes */}
       <aside className="w-64 bg-white shadow-md relative hidden lg:flex lg:flex-col lg:justify-between h-full">
         <div>
           <img src="logo.png" className="p-4" alt="Logo" />
@@ -113,7 +112,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         )}
       </aside>
 
-      <main className="flex-1 p-6 overflow-y-auto">{children}</main>
+      <main className="flex-1 p-6 overflow-y-auto ">{children}</main>
     </div>
   );
 };

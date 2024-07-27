@@ -43,9 +43,7 @@ const AdminAulas: React.FC = () => {
     try {
       const response = await api.get('/aulas');
       const data = response.data;
-
-      console.log('Dados recebidos:', data);
-
+      
       const validatedCards: Card[] = data.filter((card: Card) =>
         card.id !== undefined &&
         card.title !== undefined &&

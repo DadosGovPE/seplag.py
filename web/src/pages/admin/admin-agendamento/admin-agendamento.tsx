@@ -134,7 +134,6 @@ const AdminAgendamento = () => {
     try {
       const response = await api.get<Appointment[]>('/agendamentos');
       const filteredAppointments = response.data.filter(appointment => appointment.send === false);
-      console.log(response)
       setAppointments(filteredAppointments);
     } catch (error) {
       console.error('Erro ao buscar agendamentos:', error);
@@ -298,7 +297,7 @@ const AdminAgendamento = () => {
         )}
 
 {activeSection === 'appointments' && (
-  <div className="flex-1 flex">
+  <div className="flex-1 flex h-full">
     <div className="w-1/2 px-2">
       <ul className="border-gray-300 rounded-md border p-5 h-full">
         {appointments.length > 0 ? (

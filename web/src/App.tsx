@@ -6,6 +6,7 @@ import Admin_login from './pages/admin/admin-login/admin-login';
 import Admin_aulas from './pages/admin/admin-aulas/admin-aulas';
 import Admin_agendamento from './pages/admin/admin-agendamento/admin-agendamento';
 import { AuthProvider } from './hooks/AuthContext';
+import PrivateRoute from './hooks/PrivateRoute';
 
 const App = () => {
   return (
@@ -16,8 +17,8 @@ const App = () => {
             <Route path="/newsletter" element={<NewsLetter />} />
             <Route path="/aulas-anteriores" element={<Aulas_anteriores />} />
             <Route path="/admin" element={<Admin_login />} />
-            <Route path="/admin-aulas" element={<Admin_aulas />} />
-            <Route path="/admin-agendamento" element={<Admin_agendamento />} />
+            <Route path="/admin-aulas" element={<PrivateRoute element={<Admin_aulas />} />} />
+            <Route path="/admin-agendamento" element={<PrivateRoute element={<Admin_agendamento />} />} />
           </Routes>
         </Layout>
       </AuthProvider>
