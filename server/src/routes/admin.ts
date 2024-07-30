@@ -41,7 +41,6 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
     }
   });
 
-  // Rota para criar uma nova aula
   fastify.post("/aulas", async (request, reply) => {
     const { title, description, link, date } = request.body as {
       title: string;
@@ -72,7 +71,6 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
     }
   });
 
-  // Rota para atualizar uma aula
   fastify.put("/aulas/:id", async (request, reply) => {
     const { id } = request.params as { id: string };
     const { title, description, link, date } = request.body as {
@@ -105,7 +103,6 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
     }
   });
 
-  // Rota para deletar uma aula
   fastify.delete("/aulas/:id", async (request, reply) => {
     const { id } = request.params as { id: string };
 
@@ -124,31 +121,40 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
         .send({ message: "Erro ao tentar deletar a aula." });
     }
   });
+
+
   fastify.post("/agendamentos", async (request, reply) => {
-    const { content, date } = request.body as {
-      content: string;
-      date: string;
-    };
+  const { content, date } = request.body as {
+    content: string;
+    date: string;
+  };
 
-    try {
-      const newAgendamento = await prisma.agendamento.create({
-        data: {
-          content,
-          date: new Date(date),
-        },
-      });
+  if (!content || !date) {
+    return reply.status(400).send({
+      message: "Campos 'content' e 'date' são obrigatórios.",
+    });
+  }
 
-      return reply.status(201).send({
-        message: "Agendamento criado com sucesso!",
-        agendamento: newAgendamento,
-      });
-    } catch (err) {
-      request.log.error(err);
-      return reply
-        .status(500)
-        .send({ message: "Erro ao tentar criar o agendamento." });
-    }
-  });
+  let updatedContent = content.replace('logo.png', 'cid:banner.png');
+
+  try {
+    const newAgendamento = await prisma.agendamento.create({
+      data: {
+        content: updatedContent,
+        date: new Date(date),
+      },
+    });
+
+    return reply.status(201).send({
+      message: "Agendamento criado com sucesso!",
+      agendamento: newAgendamento,
+    });
+  } catch (err) {
+    request.log.error(err);
+    return reply.status(500).send({ message: "Erro ao tentar criar o agendamento." });
+  }
+});
+
 
   fastify.get("/agendamentos", async (request, reply) => {
     try {
@@ -165,7 +171,6 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
     }
   });
 
-  // Rota para atualizar um agendamento
   fastify.put("/agendamentos/:id", async (request, reply) => {
     const { id } = request.params as { id: string };
     const { content, date } = request.body as {
@@ -194,7 +199,6 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
     }
   });
 
-  // Rota para deletar um agendamento
   fastify.delete("/agendamentos/:id", async (request, reply) => {
     const { id } = request.params as { id: string };
 
