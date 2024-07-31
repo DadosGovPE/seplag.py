@@ -21,7 +21,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   ];
 
   return (
-    <div className="relative flex h-screen bg-gray-100">
+    <div className="relative flex h-screen bg-gray-100 ">
       <header className="w-full bg-white shadow-md fixed top-0 left-0 lg:hidden">
         <div className="flex items-center justify-between p-4">
           <img src="logo.png" className="h-8" alt="Logo" />
@@ -112,7 +112,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         )}
       </aside>
 
-      <main className="flex-1 p-6 overflow-y-auto ">{children}</main>
+      <main className="flex-1 overflow-y-auto ">{children}</main>
     </div>
   );
 };

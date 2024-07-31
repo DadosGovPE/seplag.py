@@ -122,39 +122,39 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
     }
   });
 
-
   fastify.post("/agendamentos", async (request, reply) => {
-  const { content, date } = request.body as {
-    content: string;
-    date: string;
-  };
+    const { content, date } = request.body as {
+      content: string;
+      date: string;
+    };
 
-  if (!content || !date) {
-    return reply.status(400).send({
-      message: "Campos 'content' e 'date' são obrigatórios.",
-    });
-  }
+    if (!content || !date) {
+      return reply.status(400).send({
+        message: "Campos 'content' e 'date' são obrigatórios.",
+      });
+    }
 
-  let updatedContent = content.replace('logo.png', 'cid:banner.png');
+    let updatedContent = content.replace("logo.png", "cid:banner.png");
 
-  try {
-    const newAgendamento = await prisma.agendamento.create({
-      data: {
-        content: updatedContent,
-        date: new Date(date),
-      },
-    });
+    try {
+      const newAgendamento = await prisma.agendamento.create({
+        data: {
+          content: updatedContent,
+          date: new Date(date),
+        },
+      });
 
-    return reply.status(201).send({
-      message: "Agendamento criado com sucesso!",
-      agendamento: newAgendamento,
-    });
-  } catch (err) {
-    request.log.error(err);
-    return reply.status(500).send({ message: "Erro ao tentar criar o agendamento." });
-  }
-});
-
+      return reply.status(201).send({
+        message: "Agendamento criado com sucesso!",
+        agendamento: newAgendamento,
+      });
+    } catch (err) {
+      request.log.error(err);
+      return reply
+        .status(500)
+        .send({ message: "Erro ao tentar criar o agendamento." });
+    }
+  });
 
   fastify.get("/agendamentos", async (request, reply) => {
     try {
