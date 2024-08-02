@@ -8,8 +8,9 @@ RUN npm install
 
 COPY . .
 
+RUN npx prisma migrate dev --name=sync
 RUN npx prisma generate
 
-EXPOSE 3000
+EXPOSE 3005
 
 CMD ["npm", "run", "dev"]

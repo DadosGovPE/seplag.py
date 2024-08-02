@@ -68,7 +68,7 @@ export default function NewsLetter() {
   return (
     <div className="shadow-xl rounded flex items-center justify-center h-full overflow-hidden bg-[url('bg.gif')] bg-cover bg-center bg-no-repeat bg-opacity-35">
       <div className="max-w-md w-full p-6 bg-white shadow-md rounded">
-        <h2 className="text-2xl font-bold mb-4">Inscreva-se na nossa Newsletter</h2>
+        <h2 className="text-2xl font-extrabold mb-4 text-gray-600 text-center" style={{fontFamily:"Snell Roundhand, cursive"}}>Inscreva-se na nossa Newsletter</h2>
         {message && <p className="mb-4 text-red-500">{message}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -98,6 +98,7 @@ export default function NewsLetter() {
           <button
             type="submit"
             className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
+            style={{fontFamily:"Snell Roundhand, cursive"}}
           >
             Inscrever-se
           </button>
