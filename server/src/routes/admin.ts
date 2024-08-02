@@ -134,12 +134,10 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
       });
     }
 
-    let updatedContent = content.replace("logo.png", "cid:banner.png");
-
     try {
       const newAgendamento = await prisma.agendamento.create({
         data: {
-          content: updatedContent,
+          content: content,
           date: new Date(date),
         },
       });

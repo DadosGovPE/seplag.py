@@ -200,7 +200,7 @@ const AdminAgendamento = () => {
     .replace('{{meetingTitle}}', meetingTitle);
 
   return (
-    <div className='bg-white min-h-screen'>
+    <div className='p-10 box-border h-full'>
       <div className="bg-gray-800 text-white flex justify-around rounded p-4">
         <button
           className={`p-2 rounded ${activeSection === 'schedule' ? 'bg-blue-500' : ''}`}
@@ -218,10 +218,13 @@ const AdminAgendamento = () => {
           Agendamentos
         </button>
       </div>
-
-      <div className="flex flex-wrap p-4 justify-between flex-1">
+      <div className="flex p-4 justify-center gap-10 bg-white"  style={{height: "87vh"}}> 
+        {/* o height é referente ao tamanho da tela que esta pegando o padding do pai e dele mesmo */}
         {activeSection === 'schedule' && (
-          <div className="w-1/2 p-5 my-4 border border-gray-300 rounded-md">            
+          <div className="w-1/2 p-5 my-2 border border-gray-300 rounded-md flex flex-col justify-around">         
+            <h1 className='text-3xl text-center font-bold'>Agendamento das Aulas</h1>  
+          <div>
+
             <label htmlFor="date_agendamento" className="block text-sm font-medium text-gray-700 mb-2">
               Data de Envio
             </label>            
@@ -275,6 +278,9 @@ const AdminAgendamento = () => {
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
             />
+          </div>
+          <div>
+
             <button
               className="w-full bg-blue-500 text-white p-2 rounded-md"
               onClick={insertImageToContent}
@@ -288,6 +294,7 @@ const AdminAgendamento = () => {
             >
               Agendar
             </button>
+            </div>
             {feedbackMessage && (
               <div className="mt-4 text-red-500">
                 {feedbackMessage}
@@ -297,9 +304,8 @@ const AdminAgendamento = () => {
         )}
 
 {activeSection === 'appointments' && (
-  <div className="flex-1 flex h-full">
-    <div className="w-1/2 px-2">
-      <ul className="border-gray-300 rounded-md border p-5 h-full">
+  <div className="flex-1 flex h-full gap-10">
+      <ul className="w-1/2 p-5 my-2 border border-gray-300 rounded-md">
         {appointments.length > 0 ? (
           appointments.map((appointment) => (
             <li key={appointment.id} className="border-b py-2 flex justify-between items-center">
@@ -332,13 +338,12 @@ const AdminAgendamento = () => {
           <li>Não há agendamentos.</li>
         )}
       </ul>
-    </div>
-    <div className="w-1/2 p-5 border border-gray-300 rounded-md">
+    <div className="w-1/2 p-5 my-2 border border-gray-300 rounded-md">
       {scheduleSelected ? (
         <iframe
           title="Visualização do Agendamento"
           srcDoc={appointments.find((appt) => appt.id === scheduleSelected)?.content || ''}
-          className="w-full h-screen border-0"
+          className="w-full h-full"
         />
       ) : (
         <div>
@@ -351,14 +356,12 @@ const AdminAgendamento = () => {
 )}
 
         {activeSection === 'schedule' && (
-          <div className="w-1/2 p-5 mb-4">
-            <div className="border border-gray-300 rounded-md h-full">
+          <div className="w-1/2 p-5 my-2 border border-gray-300 rounded-md">
               <iframe
                 title="Visualização"
                 srcDoc={combinedHtml}
-                className="w-full h-full border-0"
+                className="w-full h-full"
               />
-            </div>
           </div>
         )}
       </div>
