@@ -3,6 +3,8 @@ import { api } from '../../../service/api';
 import SearchBar from '../../../components/Searchbar';
 import AulaFormModal from '../../../components/AulaFormModal';
 import AulaList from '../../../components/AulaList';
+import Title from '../../../components/Title';
+
 
 export interface Card {
   id: number;
@@ -149,15 +151,18 @@ const AdminAulas: React.FC = () => {
   );
 
   return (
-    <div className='bg-white p-5 shadow-md min-h-screen'>
-      <h1 className="text-2xl font-bold mb-4">Gerenciamento de Aulas</h1>
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <button
-        onClick={() => setModalOpen(true)}
-        className="mb-6 bg-blue-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-700 transition-colors duration-300"
-      >
-        Adicionar Aula
-      </button>
+    <div className='p-10 box-border h-full'>
+      <div className='p-4 gap-10 bg-white rounded-md h-full'>
+        <div className='h-1/3'>
+          <Title Text={"Gerenciamento de Aulas"} />
+          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          <button
+            onClick={() => setModalOpen(true)}
+            className="mb-6 bg-blue-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-700 transition-colors duration-300"
+            >
+            Adicionar Aula
+          </button>
+        </div>
       {filteredCards.length > 0 ? (
         <AulaList
           currentCards={currentCards}
@@ -180,9 +185,10 @@ const AdminAulas: React.FC = () => {
           error={error}
           success={success}
           editingCard={editingCard}
-        />
-      )}
+          />
+        )}
     </div>
+        </div>
   );
 };
 

@@ -25,11 +25,10 @@ const AulaList: React.FC<AulaListProps> = ({
     return dateB - dateA; 
   });
 
- 
-
   return (
-    <>
-      <h2 className="text-lg font-semibold mt-8 mb-4">Aulas Cadastradas</h2>
+    <div className='flex flex-col h-2/3 justify-between'>
+      <div>
+      <h2 className="text-gray-600 font-bold text-center text-2xl p-5">Aulas Cadastradas</h2>
       <ul className="space-y-4">
         {sortedCards.map(card => (
           <li
@@ -62,8 +61,9 @@ const AulaList: React.FC<AulaListProps> = ({
           </li>
         ))}
       </ul>
+      </div>
 
-      <div className="flex justify-between items-center mt-6">
+      <div className="flex justify-between">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -80,7 +80,7 @@ const AulaList: React.FC<AulaListProps> = ({
           Próxima
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
