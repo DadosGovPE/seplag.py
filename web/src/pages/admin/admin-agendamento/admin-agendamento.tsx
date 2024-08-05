@@ -227,7 +227,7 @@ const AdminAgendamento = () => {
 
             <label htmlFor="date_agendamento" className="block text-sm font-medium text-gray-700 mb-2">
               Data de Envio
-            </label>            
+            </label>
             <input
               id='date_agendamento'
               type="date"
