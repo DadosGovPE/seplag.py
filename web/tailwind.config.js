@@ -3,7 +3,7 @@ export default {
     theme: {
       extend: {
         backgroundImage: {
-          'bg': "url('bg.gif')",
+          'bg': "url('assets/bg.gif')",
         }
       },
     },
