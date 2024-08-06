@@ -2,6 +2,7 @@ import { FastifyPluginAsync } from "fastify";
 import prisma from "../prisma";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET, JWT_EXPIRATION } from "../config/jwt";
+import formatDate from "../functions/formatDate";
 
 const adminRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.post("/admin-login", async (request, reply) => {
@@ -55,7 +56,7 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
           title,
           description,
           link,
-          date: new Date(date),
+          date,
         },
       });
 
@@ -87,7 +88,7 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
           title,
           description,
           link,
-          date: date ? new Date(date) : undefined,
+          date,
         },
       });
 
@@ -127,6 +128,7 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
       content: string;
       date: string;
     };
+    console.log(content, date);
 
     if (!content || !date) {
       return reply.status(400).send({
@@ -138,7 +140,8 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
       const newAgendamento = await prisma.agendamento.create({
         data: {
           content: content,
-          date: new Date(date),
+          date: date,
+          createdAt: String(formatDate(new Date(Date.now()))),
         },
       });
 
@@ -181,7 +184,7 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
         where: { id: Number(id) },
         data: {
           content,
-          date: date ? new Date(date) : undefined,
+          date: date
         },
       });
 

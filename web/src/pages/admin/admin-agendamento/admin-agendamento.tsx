@@ -133,6 +133,7 @@ const AdminAgendamento = () => {
   const viewScheduledAppointments = async () => {
     try {
       const response = await api.get<Appointment[]>('/agendamentos');
+      console.log(response.data)
       const filteredAppointments = response.data.filter(appointment => appointment.send === false);
       setAppointments(filteredAppointments);
     } catch (error) {
@@ -152,13 +153,11 @@ const AdminAgendamento = () => {
         .replace('{{content}}', htmlContent)
         .replace('{{scheduleText}}', scheduleText)
         .replace('{{meetingTitle}}', meetingTitle);
-
-      const response = await api.post('/agendamentos', {
+        await api.post('/agendamentos', {
         content: combinedHtml,
         date: selectedDate
       } as FormData);
 
-      console.log('Agendamento enviado com sucesso:', response.data);
       setMeetingTitle('');
       setScheduleText('Toda terça, 8h30 da manhã');
       setHtmlContent('<p>Edite este conteúdo</p>');
@@ -310,7 +309,7 @@ const AdminAgendamento = () => {
           appointments.map((appointment) => (
             <li key={appointment.id} className="border-b py-2 flex justify-between items-center">
               <div>
-                <p><strong>Data:</strong> {new Date(appointment.date).toLocaleDateString()}</p>
+                <p><strong>Data:</strong> {appointment.date}</p>
               </div>
               <div className="space-x-2">
                 <button

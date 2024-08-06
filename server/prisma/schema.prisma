@@ -27,13 +27,13 @@ model Aula {
   title       String
   description String
   link        String
-  date        DateTime
+  date        String   
 }
 
 model Agendamento {
-  id        Int      @id @default(autoincrement())
-  content   String
-  date      DateTime
-  createdAt DateTime @default(now())
-  send      Boolean  @default(false)
+  id         Int      @id @default(autoincrement())
+  content    String
+  date       String  
+  createdAt  String 
+  send       Boolean  @default(false)
 }
