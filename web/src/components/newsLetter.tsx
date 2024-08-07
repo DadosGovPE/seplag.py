@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { api } from '../../service/api';
+import { api } from '../service/api';
 
 export default function NewsLetter() {
   const [formData, setFormData] = useState({ name: '', email: '' });
@@ -67,7 +67,7 @@ export default function NewsLetter() {
   }
 
   return (
-    <div className="shadow-xl rounded flex items-center justify-center h-full overflow-hidden bg-[url('assets/bg.gif')] bg-cover bg-center bg-no-repeat bg-opacity-35">
+    <div className="rounded flex items-center justify-center h-full overflow-hidden bg-cover bg-center bg-no-repeat bg-opacity-35">
       <div className="max-w-md w-full p-6 bg-white shadow-md rounded">
         <h2 className="text-2xl font-extrabold mb-4 text-gray-600 text-center" style={{fontFamily:"Snell Roundhand, cursive"}}>Inscreva-se na nossa Newsletter</h2>
         {message && <p className="mb-4 text-red-500">{message}</p>}

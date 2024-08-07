@@ -199,8 +199,8 @@ const AdminAgendamento = () => {
     .replace('{{meetingTitle}}', meetingTitle);
 
   return (
-    <div className='p-10 box-border h-full'>
-      <div className="bg-gray-800 text-white flex justify-around rounded p-4">
+    <div className='p-2 m-10 '>
+      <div className="bg-gray-800 text-white flex justify-around rounded p-4 mb-5">
         <button
           className={`p-2 rounded ${activeSection === 'schedule' ? 'bg-blue-500' : ''}`}
           onClick={() => setActiveSection('schedule')}
@@ -217,11 +217,10 @@ const AdminAgendamento = () => {
           Agendamentos
         </button>
       </div>
-      <div className="flex p-4 justify-center gap-10 bg-white"  style={{height: "87vh"}}> 
-        {/* o height é referente ao tamanho da tela que esta pegando o padding do pai e dele mesmo */}
+      <div className="flex p-4 justify-center gap-10 bg-white border border-gray-200"> 
         {activeSection === 'schedule' && (
           <div className="w-1/2 p-5 my-2 border border-gray-300 rounded-md flex flex-col justify-around">         
-            <h1 className='text-3xl text-center font-bold'>Agendamento das Aulas</h1>  
+         
           <div>
 
             <label htmlFor="date_agendamento" className="block text-sm font-medium text-gray-700 mb-2">

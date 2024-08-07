@@ -184,7 +184,7 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
         where: { id: Number(id) },
         data: {
           content,
-          date: date
+          date: date,
         },
       });
 
