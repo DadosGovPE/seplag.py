@@ -1,5 +1,6 @@
 import { useState, useRef, ChangeEvent } from 'react';
 import { api } from '../../../service/api';
+import {motion} from 'framer-motion'
 
 interface Appointment {
   id: string;
@@ -199,28 +200,33 @@ const AdminAgendamento = () => {
     .replace('{{meetingTitle}}', meetingTitle);
 
   return (
-    <div className='p-2 m-10 '>
+    <div className='p-2 m-10'>
       <div className="bg-gray-800 text-white flex justify-around rounded p-4 mb-5">
-        <button
-          className={`p-2 rounded ${activeSection === 'schedule' ? 'bg-blue-500' : ''}`}
-          onClick={() => setActiveSection('schedule')}
-        >
-          Agendar
-        </button>
-        <button
-          className={`p-2 rounded ${activeSection === 'appointments' ? 'bg-blue-500' : ''}`}
-          onClick={() => {
-            setActiveSection('appointments');
-            viewScheduledAppointments();
-          }}
-        >
-          Agendamentos
-        </button>
-      </div>
+      <motion.button
+        className={`p-2 rounded ${activeSection === 'schedule' ? 'bg-blue-500' : ''}`}
+        onClick={() => setActiveSection('schedule')}
+        whileHover={{ scale: 1.1, opacity: 0.8 }}
+        whileTap={{ scale: 0.9 }}
+        transition={{ duration: 0.3 }}
+      >
+        Agendar
+      </motion.button>
+      <motion.button
+        className={`p-2 rounded ${activeSection === 'appointments' ? 'bg-blue-500' : ''}`}
+        onClick={() => {
+          setActiveSection('appointments');
+          viewScheduledAppointments();
+        }}
+        whileHover={{ scale: 1.1, opacity: 0.8 }}
+        whileTap={{ scale: 0.9 }}
+        transition={{ duration: 0.3 }}
+      >
+        Agendamentos
+      </motion.button>
+    </div>
       <div className="flex p-4 justify-center gap-10 bg-white border border-gray-200"> 
         {activeSection === 'schedule' && (
           <div className="w-1/2 p-5 my-2 border border-gray-300 rounded-md flex flex-col justify-around">         
-         
           <div>
 
             <label htmlFor="date_agendamento" className="block text-sm font-medium text-gray-700 mb-2">
@@ -280,7 +286,7 @@ const AdminAgendamento = () => {
           <div>
 
             <button
-              className="w-full bg-blue-500 text-white p-2 rounded-md"
+              className="w-full text-gray-500 border border-gray-400 cursor-pointer p-2 rounded-md bg-white transition-colors duration-300 hover:bg-slate-600 hover:text-white active:bg-gray-700"
               onClick={insertImageToContent}
               disabled={!imageUrl}
             >

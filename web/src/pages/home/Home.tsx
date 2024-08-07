@@ -4,22 +4,14 @@ import { Link } from 'react-router-dom';
 export default function Home() {
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex flex-col md:flex-row bg-cover bg-center px-10 bg-[url('assets/bg.gif')] py-40">
+    <div className="min-h-screen">
+      <div className="flex justify-center text-center bg-cover bg-center bg-[url('assets/bg.gif')] pt-40 pb-28">
         <div className="md:w-1/2 mb-6 md:mb-0 text-white">
           <h2 className="text-3xl font-bold mb-4">Bem-vindo ao Seplag.py</h2>
-          <p className="text-lg mb-4">
+          <p className="text-lg mb-20">
             O Seplag.py é um encontro <s>quase</s> semanal que tem como objetivo
             difundir o conhecimento dessa linguagem entre os seplaguianos.
           </p>
-          <Link
-            to="/aulas-anteriores"
-            className="mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Aulas Anteriores
-          </Link>
-        </div>
-        <div className="md:w-1/2">
           <NewsLetter />
         </div>
       </div>
