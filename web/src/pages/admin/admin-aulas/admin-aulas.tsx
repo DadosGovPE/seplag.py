@@ -3,7 +3,6 @@ import { api } from '../../../service/api';
 import SearchBar from '../../../components/Searchbar';
 import AulaFormModal from '../../../components/AulaFormModal';
 import AulaList from '../../../components/AulaList';
-import Title from '../../../components/Title';
 
 
 export interface Card {
@@ -151,10 +150,7 @@ const AdminAulas: React.FC = () => {
   );
 
   return (
-    <div className='p-10 box-border h-full'>
-      <div className='p-4 gap-10 bg-white rounded-md h-full'>
-        <div className='h-1/3'>
-          <Title Text={"Gerenciamento de Aulas"} />
+      <div className='p-6 m-10 gap-10 bg-white rounded-md h-screen border-gray-200 border'>
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           <button
             onClick={() => setModalOpen(true)}
@@ -162,7 +158,6 @@ const AdminAulas: React.FC = () => {
             >
             Adicionar Aula
           </button>
-        </div>
       {filteredCards.length > 0 ? (
         <AulaList
           currentCards={currentCards}
@@ -188,7 +183,6 @@ const AdminAulas: React.FC = () => {
           />
         )}
     </div>
-        </div>
   );
 };
 

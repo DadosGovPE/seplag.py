@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { api } from '../service/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { FaWhatsapp, FaTwitter, FaLinkedin, FaCopy } from 'react-icons/fa';
 
 export default function NewsLetter() {
   const [formData, setFormData] = useState({ name: '', email: '' });
-  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -15,8 +16,7 @@ export default function NewsLetter() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setLoading(true);
-    setMessage('');
+    setLoading(true); // Inicia o estado de carregamento
 
     try {
       await api.post('/newsletter_subscribe', {
@@ -24,51 +24,46 @@ export default function NewsLetter() {
         nome: formData.name 
       });
 
-      setTimeout(() => {
-        setLoading(false);
-        setSubmitted(true);
-        setFormData({ name: '', email: '' });
-      }, 2000);
+      // Mostra o toast de sucesso
+      toast.success('Cadastro realizado com sucesso!', {
+        position: "top-center",
+        autoClose: 3000,
+      });
+
+      setFormData({ name: '', email: '' });
     } catch (error) {
+      // Mostra o toast de erro
+      toast.error('Ocorreu um erro ao se inscrever. Tente novamente.', {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    } finally {
       setLoading(false);
-      setMessage('Ocorreu um erro ao se inscrever. Tente novamente.');
     }
   };
 
-  const handleReset = () => {
-    setSubmitted(false);
-    setMessage('');
+  const shareText = encodeURIComponent('Confira essa newsletter incrível!');
+  const shareUrl = encodeURIComponent('http://191.252.60.33:8000/');
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`Confira essa newsletter incrível! ${shareUrl}`)
+      .then(() => {
+        toast.success('Link copiado para a área de transferência!', {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      })
+      .catch(() => {
+        toast.error('Falha ao copiar o link.', {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      });
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-blue-500 text-lg font-semibold">Carregando...</div>
-      </div>
-    );
-  }
-
-  if (submitted) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <div className="max-w-md w-full p-6 bg-green-100 border border-green-300 rounded shadow-md">
-          <h2 className="text-2xl font-bold mb-4 text-green-700">Obrigado por se inscrever!</h2>
-          <p className="mb-4 text-green-600">Você foi adicionado à nossa lista de newsletter com sucesso.</p>
-          <button
-            onClick={handleReset}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
-          >
-            Cadastrar novamente
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex items-center justify-center min-h-[20vh] bg-cover bg-center bg-no-repeat bg-opacity-35">
-      {message && <p className="mb-4 text-red-500">{message}</p>}
-      <form onSubmit={handleSubmit} className="flex w-3/5">
+    <div className="flex items-center justify-center flex-col min-h-[20vh] bg-cover bg-center bg-no-repeat bg-opacity-35 relative">
+      <form onSubmit={handleSubmit} className="flex w-3/5 mb-4">
         <input
           placeholder='Insira seu melhor email...'
           type="email"
@@ -77,16 +72,55 @@ export default function NewsLetter() {
           value={formData.email}
           onChange={handleChange}
           required
-          className="flex-grow px-3 py-2 border text-black border-gray-300 rounded-l-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
+          disabled={loading} 
+          className={`flex-grow px-5 py-4 border text-gray-600 border-gray-300 rounded-l-lg shadow-sm focus:outline-none text-xl ${loading ? 'bg-gray-200' : ''}`}
+          style={{ fontFamily: "Snell Roundhand, cursive" }}
         />
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 transition-colors duration-300"
+          disabled={loading} 
+          className={`px-4 py-2 text-white rounded-r-lg transition-colors duration-300 text-lg ${loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
           style={{ fontFamily: "Snell Roundhand, cursive" }}
         >
-          Inscrever-se
+          {loading ? 'Enviando...' : 'Inscrever-se'}
         </button>
       </form>
+
+      <div className="flex space-x-4 mb-4">
+        <a
+          href={`https://api.whatsapp.com/send?text=${shareText}%20${shareUrl}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-green-500 hover:text-green-700 transition-colors duration-300"
+        >
+          <FaWhatsapp size={32} />
+        </a>
+        <a
+          href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-400 hover:text-blue-600 transition-colors duration-300"
+        >
+          <FaTwitter size={32} />
+        </a>
+        <a
+          href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareText}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-700 hover:text-blue-900 transition-colors duration-300"
+        >
+          <FaLinkedin size={32} />
+        </a>
+        <button
+          onClick={handleCopyLink}
+          className="text-gray-500 hover:text-gray-700 transition-colors duration-300"
+        >
+          <FaCopy size={32} />
+        </button>
+      </div>
+
+      {/* Componente ToastContainer para exibir os toasts */}
+      <ToastContainer />
     </div>
   );
 }

@@ -209,7 +209,7 @@ const AdminAgendamento = () => {
         whileTap={{ scale: 0.9 }}
         transition={{ duration: 0.3 }}
       >
-        Agendar
+        Agendamento
       </motion.button>
       <motion.button
         className={`p-2 rounded ${activeSection === 'appointments' ? 'bg-blue-500' : ''}`}
@@ -221,7 +221,7 @@ const AdminAgendamento = () => {
         whileTap={{ scale: 0.9 }}
         transition={{ duration: 0.3 }}
       >
-        Agendamentos
+        Histórico
       </motion.button>
     </div>
       <div className="flex p-4 justify-center gap-10 bg-white border border-gray-200"> 

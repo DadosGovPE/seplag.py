@@ -28,7 +28,6 @@ const AulaList: React.FC<AulaListProps> = ({
   return (
     <div className='flex flex-col h-2/3 justify-between'>
       <div>
-      <h2 className="text-gray-600 font-bold text-center text-2xl p-5">Aulas Cadastradas</h2>
       <ul className="space-y-4">
         {sortedCards.map(card => (
           <li
