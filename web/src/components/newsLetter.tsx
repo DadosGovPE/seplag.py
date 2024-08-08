@@ -16,7 +16,7 @@ export default function NewsLetter() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setLoading(true); // Inicia o estado de carregamento
+    setLoading(true);
 
     try {
       await api.post('/newsletter_subscribe', {
@@ -24,7 +24,6 @@ export default function NewsLetter() {
         nome: formData.name 
       });
 
-      // Mostra o toast de sucesso
       toast.success('Cadastro realizado com sucesso!', {
         position: "top-center",
         autoClose: 3000,
@@ -63,9 +62,9 @@ export default function NewsLetter() {
 
   return (
     <div className="flex items-center justify-center flex-col min-h-[20vh] bg-cover bg-center bg-no-repeat bg-opacity-35 relative">
-      <form onSubmit={handleSubmit} className="flex w-3/5 mb-4">
+      <form onSubmit={handleSubmit} className="flex w-2/3 mb-4">
         <input
-          placeholder='Insira seu melhor email...'
+          placeholder='Receba a newsletter semanal no seu email...'
           type="email"
           id="email"
           name="email"
@@ -85,6 +84,7 @@ export default function NewsLetter() {
           {loading ? 'Enviando...' : 'Inscrever-se'}
         </button>
       </form>
+      <p></p>
 
       <div className="flex space-x-4 mb-4">
         <a
