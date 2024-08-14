@@ -3,6 +3,7 @@ import prisma from "../prisma";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET, JWT_EXPIRATION } from "../config/jwt";
 import formatDate from "../functions/formatDate";
+import { request } from "http";
 
 const adminRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.post("/admin-login", async (request, reply) => {
@@ -205,6 +206,35 @@ const adminRoutes: FastifyPluginAsync = async (fastify) => {
 
     try {
       await prisma.agendamento.delete({
+        where: { id: Number(id) },
+      });
+
+      return reply.status(200).send({
+        message: "Agendamento deletado com sucesso!",
+      });
+    } catch (err) {
+      request.log.error(err);
+      return reply
+        .status(500)
+        .send({ message: "Erro ao tentar deletar o agendamento." });
+    }
+  });
+
+  fastify.get("/inscritos", async (request, reply) => {
+    try {
+      const users = await prisma.user.findMany();
+
+      return reply.code(200).send(users);
+    } catch (err) {
+      return reply.code(500).send(err);
+    }
+  });
+
+  fastify.delete("/inscritos/:id", async (request, reply) => {
+    const { id } = request.params as { id: string };
+
+    try {
+      await prisma.user.delete({
         where: { id: Number(id) },
       });
 

@@ -11,6 +11,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       ? [
           { name: 'Agendamento', link: '/admin-agendamento', admin: true },
           { name: 'Cadastro de Aulas', link: '/admin-aulas', admin: true },
+          { name: 'Gerencia', link: '/admin-gerencia', admin: true },
         ]
       : [{ name: 'Admin', link: '/admin' }]),
   ];
@@ -54,8 +55,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
       <main className={`${mainClass} flex-grow`}>{children}</main>
       
-      <footer className="bg-gray-800 text-white p-6 text-center">
-            <p>Direitos Reservados 2024 - Instituto de Gestão de Pernambuco</p>
+      <footer className="bg-gray-800 text-white p-6 text-center bottom-auto w-full">      
+              <p>Direitos Reservados 2024 - Instituto de Gestão de Pernambuco</p>
       </footer>
     </div>
   );

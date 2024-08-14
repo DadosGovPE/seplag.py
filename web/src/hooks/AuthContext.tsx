@@ -1,10 +1,11 @@
 // AuthContext.tsx
 import { createContext, useState, ReactNode, useEffect } from 'react';
 import { api } from '../service/api';
-import { User, saveAuthData, clearAuthData, getAuthData } from './AuthHelpers';
+import { saveAuthData, clearAuthData, getAuthData } from './AuthHelpers';
+import UserInterface from '../interfaces/User';
 
 interface AuthContextType {
-  user: User | null;
+  user: UserInterface | null;
   signed: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => void;
@@ -14,7 +15,7 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserInterface | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {

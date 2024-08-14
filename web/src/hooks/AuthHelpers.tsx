@@ -1,11 +1,7 @@
 
-export interface User {
-    id: string;
-    email: string;
-    name: string;
-  }
+import UserInterface from "../interfaces/User";
   
-export const saveAuthData = (user: User, token: string) => {
+export const saveAuthData = (user: UserInterface, token: string) => {
   localStorage.setItem("@Auth:token", token);
   localStorage.setItem("@Auth:user", JSON.stringify(user));
 };
@@ -19,7 +15,7 @@ export const getAuthData = () => {
   const user = localStorage.getItem("@Auth:user");
   const token = localStorage.getItem("@Auth:token");
   return { 
-    user: user ? JSON.parse(user) : null as User | null, 
+    user: user ? JSON.parse(user) : null as UserInterface | null, 
     token 
   };
 };
